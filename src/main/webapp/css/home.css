@@ -1,0 +1,72 @@
+body {
+	margin: 0;
+	background-color: #3f4042; 
+	background-image: url("../images/home.jpg");
+	background-color: #575757; 
+	background-blend-mode : multiply;
+	background-size : cover;
+	background-repeat: no-repeat;
+}
+
+section{
+	padding:2rem;
+}
+
+.brand-logo{
+	height:4rem;
+}
+
+.navbar{
+	background-color: #000; 
+}
+
+nav li{
+	padding: .5rem;
+}
+
+nav li:hover{
+	background-color: #262729; 
+	border-radius: .7rem;
+}
+
+.item, .item:hover{
+	color: #fff;
+}
+
+#profile{
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	height:100vh;
+	padding:2rem;
+	color:white;
+}
+
+.card{
+	align-items: center;
+	padding:2rem;
+	border-radius: 1.2rem;
+	background-color: #434447; 
+}
+
+table{
+	font-size:18px;
+	color:white;
+	border-collapse:separate;
+	border-spacing:0 15px;
+}
+
+.avatadiv{
+	display:flex;
+	justify-content: center;
+	align-items: center;
+}
+.avata{
+	
+	width:150px;
+	margin-bottom:2rem;
+}
+
+td{
+	padding-left: 30px;
+}

@@ -2,10 +2,10 @@ body {
 	background-color: #000;
 	margin: 0;
 	background-image: url("../images/back.jpg");
-	background-color: grey;
-background-blend-mode: multiply;
-	background-size: cover;
-    background-repeat: no-repeat;
+	background-color: grey; 
+	background-blend-mode : multiply;
+	background-size : cover;
+	background-repeat: no-repeat;
 }
 
 .container {
@@ -22,16 +22,18 @@ background-blend-mode: multiply;
 	background-color: #000;
 }
 
-.crd2{
+.crd2 {
 	padding: 1rem;
-	color:black;
-	font-size:18px;
-	font-weight:500;
+	color: black;
+	font-size: 18px;
+	font-weight: 500;
 	margin-top: 2rem;
-	background: linear-gradient(90deg, rgba(199,199,200,0.6215278347667192) 0%, rgba(228,228,237,0.683992820761117) 35%, rgba(204,225,230,0.5010796554950105) 100%);
+	background: linear-gradient(90deg, rgba(199, 199, 200, 0.6215278347667192)
+		0%, rgba(228, 228, 237, 0.683992820761117) 35%,
+		rgba(204, 225, 230, 0.5010796554950105) 100%);
 }
 
-button{
-	width:100%;
-	margin-bottom:1.5rem;
+button {
+	width: 100%;
+	margin-bottom: 1.5rem;
 }
