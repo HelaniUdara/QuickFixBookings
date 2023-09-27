@@ -88,7 +88,56 @@
 			</div>
 		</div>
 	</section>
-	<section id="newBooking"></section>
+	<section id="newBooking">
+		<div class="container">
+			<div class="card">
+				<div class="card-body">
+				<h1 class="topic">Make a Reservation</h1><hr>
+				<form class="row g-3">
+					<div class="col-md-6">
+						<label for="servDate" class="form-label">Date</label> <input
+							type="date" class="form-control" id="servDate">
+					</div>
+					<div class="col-md-6">
+						<label for="servTime" class="form-label">Time</label> <input
+							type="time" class="form-control" id="servTime">
+					</div>
+					<div class="col-12">
+						<label for="servLocation" class="form-label">Preferred
+							Location</label> <select class="form-select"
+							aria-label="Default select example" id="servLocation">
+							<option selected>Choose preferred district</option>
+							<option value="1">Colombo</option>
+							<option value="2">Gampaga</option>
+							<option value="3">Kaluthara</option>
+							<option value="4">Galle</option>
+							<option value="5">Matara</option>
+							<option value="6">Hambanthota</option>
+						</select>
+					</div>
+					<div class="col-6">
+						<label for="vehNum" class="form-label">Vehicle
+							Registration Number</label> <input type="text" class="form-control"
+							id="vehNum" placeholder="CAT 6224">
+					</div>
+					<div class="col-md-6">
+						<label for="mileage" class="form-label">Current Mileage
+							(km)</label> <input type="number" min="0" step="0.01"
+							class="form-control" id="mileage">
+					</div>
+					<div class="col-12">
+						<label for="servmsg" class="form-label">Message</label>
+						<textarea class="form-control" id="servmsg" rows="3"></textarea>
+					</div>
+
+					<div class="col-12">
+						<button type="submit" class="btn btn-primary">Book</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		</div>
+	</section>
 	<section id="bookings"></section>
 </body>
 </html>
