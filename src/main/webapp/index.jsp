@@ -27,7 +27,7 @@
 								<div class="card-body">
 									<p class="card-text">Login using Asgardeo</p>
 									<button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
-									<p class="card-text">Don't have an Asgardeo Account? <a href="#" class="text-primary">Register</a></p>
+									<p class="card-text">Don't have an Asgardeo Account? <a href="https://console.asgardeo.io/" class="text-primary">Register</a></p>
 									
 								</div>
 							</div>

@@ -1,5 +1,39 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ page import="java.sql.*"%>
+
+<%
+		//Database connection parameters
+		String dbUrl = "jdbc:mysql://51.132.137.223:3306/isec_assessment2";
+		String dbUser = "isec";
+		String dbPassword = "EUHHaYAmtzbv";
+		ResultSet resultSet = null;
+		
+		try {
+		    // Load the MySQL JDBC driver
+		    Class.forName("com.mysql.cj.jdbc.Driver");
+		    
+		    // Establish a database connection
+		    Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+		    
+		    // Create a SQL SELECT query
+		    String sql = "SELECT * FROM vehicle_service";
+		    
+		    // Create a PreparedStatement
+		    PreparedStatement preparedStatement = conn.prepareStatement(sql);
+		    
+		    // Execute the SELECT query
+		    resultSet = preparedStatement.executeQuery();
+		    
+
+		} catch (ClassNotFoundException e) {
+		e.printStackTrace();
+		} catch (SQLException e) {
+		e.printStackTrace();
+		}
+
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +45,8 @@
 	crossorigin="anonymous">
 <title>QuickFixBookings-Home</title>
 <link rel="stylesheet" href="css/home.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 </head>
 <body>
 	<nav class="navbar fixed-top navbar-expand-lg">
@@ -142,7 +177,7 @@
 	</section>
 	<section id="bookings">
 		<div class="container">
-		<h1 class="topic list">Booking List</h1>
+			<h1 class="topic list">Booking List</h1>
 			<table class="table table-dark table-striped">
 				<thead>
 					<tr>
@@ -156,41 +191,59 @@
 					</tr>
 				</thead>
 				<tbody>
+
+					<%
+				        if (resultSet != null) {
+				        	
+				            while (resultSet.next()) {
+				            	
+				                int bookingId = resultSet.getInt("booking_id");
+				                Date date = resultSet.getDate("date");
+				                Time time = resultSet.getTime("time");
+				                String location = resultSet.getString("location");
+				                int mileage = resultSet.getInt("mileage");
+				                String vehicleNo = resultSet.getString("vehicle_no");
+				                String message = resultSet.getString("message");
+        			%>
+
 					<tr>
-						<th scope="row">1</th>
-						<td>Mark</td>
-						<td>Otto</td>
-						<td>@mdo</td>
-						<td>Mark</td>
-						<td>Otto</td>
-						<td>@mdo</td>
+						<td><%= bookingId %></td>
+						<td><%= date %></td>
+						<td><%= time %></td>
+						<td><%= location %></td>
+						<td><%= vehicleNo %></td>
+						<td><%= mileage %></td>
+						<td><%= message %></td>
 					</tr>
-					<tr>
-						<th scope="row">2</th>
-						<td>Jacob</td>
-						<td>Thornton</td>
-						<td>@fat</td>
-						<td>Jacob</td>
-						<td>Thornton</td>
-						<td>@fat</td>
-					</tr>
+					<% 
+            }}
+            
+    %>
 				</tbody>
 			</table>
 		</div>
 	</section>
-	 <div class="footer-dark">
-        <footer>
-            <div class="container">
-                <div class="row social">
-                    <div class="col-md-12 item text">
-                        <h3>Quick Fix Bookings</h3>
-                        <p>Praesent sed lobortis mi. Suspendisse vel placerat ligula. Vivamus ac sem lacus. Ut vehicula rhoncus elementum. Etiam quis tristique lectus. Aliquam in arcu eget velit pulvinar dictum vel in justo.</p>
-                    </div>
-                    <div class="col item social"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-instagram"></i></a></div>
-                </div>
-                <p class="copyright">QuickFixBookings © 2023 | Created by Helani Seekkubadu</p>
-            </div>
-        </footer>
-    </div>
+	<div class="footer-dark">
+		<footer>
+			<div class="container">
+				<div class="row social">
+					<div class="col-md-12 item text">
+						<h3>Quick Fix Bookings</h3>
+						<p>Praesent sed lobortis mi. Suspendisse vel placerat ligula.
+							Vivamus ac sem lacus. Ut vehicula rhoncus elementum. Etiam quis
+							tristique lectus. Aliquam in arcu eget velit pulvinar dictum vel
+							in justo.</p>
+					</div>
+					<div class="col item social">
+						<a href="#"><i class="icon ion-social-facebook"></i></a><a
+							href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i
+							class="icon ion-social-instagram"></i></a>
+					</div>
+				</div>
+				<p class="copyright">QuickFixBookings © 2023 | Created by Helani
+					Seekkubadu</p>
+			</div>
+		</footer>
+	</div>
 </body>
 </html>
