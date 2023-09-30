@@ -1,42 +1,166 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ page import="java.sql.*"%>
+<%@ page import="java.sql.*, java.util.Date, java.text.SimpleDateFormat"%>
 
 <%
-		//Database connection parameters
-		String dbUrl = "jdbc:mysql://51.132.137.223:3306/isec_assessment2";
-		String dbUser = "isec";
-		String dbPassword = "EUHHaYAmtzbv";
-		ResultSet resultSet = null;
-		
-		try {
-		    // Load the MySQL JDBC driver
-		    Class.forName("com.mysql.cj.jdbc.Driver");
-		    
-		    // Establish a database connection
-		    Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-		    
-		    // Create a SQL SELECT query
-		    String sql = "SELECT * FROM vehicle_service";
-		    
-		    // Create a PreparedStatement
-		    PreparedStatement preparedStatement = conn.prepareStatement(sql);
-		    
-		    // Execute the SELECT query
-		    resultSet = preparedStatement.executeQuery();
-		    
+//Database connection parameters
+String dbUrl = "jdbc:mysql://51.132.137.223:3306/isec_assessment2";
+String dbUser = "isec";
+String dbPassword = "EUHHaYAmtzbv";
+ResultSet results = null;
 
-		} catch (ClassNotFoundException e) {
+try {
+	// Load the MySQL JDBC driver
+	Class.forName("com.mysql.cj.jdbc.Driver");
+
+	// Establish a database connection
+	Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+
+	// Create a SQL SELECT query
+	String sql = "SELECT * FROM vehicle_service";
+
+	// Create a PreparedStatement
+	PreparedStatement preparedStatement = conn.prepareStatement(sql);
+
+	// Execute the SELECT query
+	results = preparedStatement.executeQuery();
+
+} catch (ClassNotFoundException e) {
+	e.printStackTrace();
+} catch (SQLException e) {
+	e.printStackTrace();
+}
+if (request.getParameter("submit") != null) {
+	// Get form data
+	String dateString = request.getParameter("servDate");
+	String timeString = request.getParameter("servTime");
+	String location = request.getParameter("servLocation");
+	int mileage = Integer.parseInt(request.getParameter("mileage"));
+	String vehicleNo = request.getParameter("vehNum");
+	String message = request.getParameter("servmsg");
+	//String userName = request.getParameter("Boss2");
+
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+	Date date = null;
+	Time time = null;
+
+	try {
+		date = new Date(dateFormat.parse(dateString).getTime());
+		time = new Time(timeFormat.parse(timeString).getTime());
+	} catch (Exception e) {
 		e.printStackTrace();
-		} catch (SQLException e) {
-		e.printStackTrace();
+	}
+
+	try {
+		// Load the MySQL JDBC driver
+		Class.forName("com.mysql.cj.jdbc.Driver");
+
+		// Establish a database connection
+		Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+
+		// Create a SQL INSERT statement
+		String insertSql = "INSERT INTO vehicle_service (date, time, location, mileage, vehicle_no, message, username) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+		// Create a PreparedStatement
+		PreparedStatement insertStatement = conn.prepareStatement(insertSql);
+
+		// Set the parameter values
+		insertStatement.setTimestamp(1, new Timestamp(date.getTime()));
+		insertStatement.setTimestamp(2, new Timestamp(time.getTime()));
+		insertStatement.setString(3, location);
+		insertStatement.setInt(4, mileage);
+		insertStatement.setString(5, vehicleNo);
+		insertStatement.setString(6, message);
+		insertStatement.setString(7, "Boss2");
+
+		// Execute the INSERT statement
+		int rowsInserted = insertStatement.executeUpdate();
+
+		// Check if the insertion was successful
+		if (rowsInserted > 0) {
+	out.println("Data inserted successfully.");
+		} else {
+	out.println("Failed to insert data.");
 		}
 
+		// Close the database connection
+		//conn.close();
+	} catch (ClassNotFoundException | SQLException e) {
+		e.printStackTrace();
+	}
+}
 %>
 
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+	/*
+	 const introspectionEndpointUrl = 'https://api.asgardeo.io/t/orghsx24/oauth2/introspect';
+	 const accessToken = localStorage.getItem('access_token');
+	 const idToken = localStorage.getItem('id_token');
+
+	 if (accessToken && idToken) {
+	 var settings = {
+	 "url" : introspectionEndpointUrl,
+	 "method" : "POST",
+	 "timeout" : 0,
+	 "headers" : {
+	 "Authorization" : "Bearer " + accessToken
+	 },
+	 "data" : {
+	 "token" : accessToken
+	 }
+	 };
+
+	 $
+	 .ajax(settings)
+	 .done(
+	 function(response) {
+	 console.log(response);
+
+	 // Check if the token is active before making the userinfo request
+	 if (response.active) {
+	 var userinfoSettings = {
+	 "url" : "https://api.asgardeo.io/t/orghsx24/oauth2/userinfo",
+	 "method" : "GET",
+	 "timeout" : 0,
+	 "headers" : {
+	 "Authorization" : "Bearer "
+	 + accessToken
+	 },
+	 };
+
+	 $.ajax(userinfoSettings).done(
+	 function(userinfoResponse) {
+	 console.log(userinfoResponse);
+	 // Process userinfoResponse as needed
+	 }).fail(
+	 function(userinfoError) {
+	 console.error('Userinfo Error:',
+	 userinfoError);
+	 alert("Userinfo Error:");
+	 });
+	 } else {
+	 // Handle inactive token
+	 console.error('Token is inactive');
+	 alert("Token is inactive");
+	 }
+	 }).fail(function(introspectionError) {
+	 // Handle introspection error
+	 console.error('Introspection Error:', introspectionError);
+	 alert("Introspection Error:");
+	 });
+	 } else {
+	 window.location.href = "index.jsp";
+	 }
+	 */
+</script>
+
+
 <meta charset="ISO-8859-1">
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
@@ -96,27 +220,27 @@
 							<tr>
 								<th>Name :</th>
 								<td></td>
-								<td>Helani</td>
+								<td><span id='name'></span></td>
 							</tr>
 							<tr>
 								<th>Username :</th>
 								<td></td>
-								<td>Helani_Udara</td>
+								<td><span id='username'></span></td>
 							</tr>
 							<tr>
 								<th>Email :</th>
 								<td></td>
-								<td>udarahSeekku@gmail.com</td>
+								<td><span id='email'></span></td>
 							</tr>
 							<tr>
 								<th>Contact No :</th>
 								<td></td>
-								<td>0712345673</td>
+								<td><span id='phone'></span></td>
 							</tr>
 							<tr>
 								<th>Country :</th>
 								<td></td>
-								<td>Sri Lanka</td>
+								<td><span id='country'></span></td>
 							</tr>
 						</table>
 					</div>
@@ -133,42 +257,64 @@
 					<form class="row g-3">
 						<div class="col-md-6">
 							<label for="servDate" class="form-label">Date</label> <input
-								type="date" class="form-control" id="servDate">
+								type="date" class="form-control" id="servDate" name="servDate">
 						</div>
 						<div class="col-md-6">
 							<label for="servTime" class="form-label">Time</label> <input
-								type="time" class="form-control" id="servTime">
+								type="time" class="form-control" id="servTime" name="servTime">
 						</div>
 						<div class="col-12">
 							<label for="servLocation" class="form-label">Preferred
 								Location</label> <select class="form-select"
-								aria-label="Default select example" id="servLocation">
+								aria-label="Default select example" id="servLocation"
+								name="servLocation">
 								<option selected>Choose preferred district</option>
-								<option value="1">Colombo</option>
-								<option value="2">Gampaga</option>
-								<option value="3">Kaluthara</option>
-								<option value="4">Galle</option>
-								<option value="5">Matara</option>
-								<option value="6">Hambanthota</option>
+								<option value="Colombo">Colombo</option>
+								<option value="Gampaga">Gampaga</option>
+								<option value="Kaluthara">Kaluthara</option>
+								<option value="Galle">Galle</option>
+								<option value="Matara">Matara</option>
+								<option value="Hambanthota">Hambanthota</option>
+								<option value="Kandy">Kandy</option>
+								<option value="Matale">Matale</option>
+								<option value="Nuwara Eliya">Nuwara Eliya</option>
+								<option value="Kegalle">Kegalle</option>
+								<option value="Ratnapura">Ratnapura</option>
+								<option value="Anuradhapura">Anuradhapura</option>
+								<option value="Polonnaruwa">Polonnaruwa</option>
+								<option value="Puttalam">Puttalam</option>
+								<option value="Kurunegala">Kurunegala</option>
+								<option value="Badulla">Badulla</option>
+								<option value="Monaragala">Monaragala</option>
+								<option value="Trincomalee">Trincomalee</option>
+								<option value="Batticaloa">Batticaloa</option>
+								<option value="Ampara">Ampara</option>
+								<option value="Jaffna">Jaffna</option>
+								<option value="Kilinochchi">Kilinochchi</option>
+								<option value="Mannar">Mannar</option>
+								<option value="Mullaitivu">Mullaitivu</option>
+								<option value="Vavuniya">Vavuniya</option>
 							</select>
 						</div>
 						<div class="col-6">
 							<label for="vehNum" class="form-label">Vehicle
 								Registration Number</label> <input type="text" class="form-control"
-								id="vehNum" placeholder="CAT 6224">
+								id="vehNum" name="vehNum" placeholder="CAT 6224">
 						</div>
 						<div class="col-md-6">
 							<label for="mileage" class="form-label">Current Mileage
-								(km)</label> <input type="number" min="0" step="0.01"
-								class="form-control" id="mileage">
+								(km)</label> <input type="number" min="0" class="form-control"
+								id="mileage" name="mileage">
 						</div>
 						<div class="col-12">
 							<label for="servmsg" class="form-label">Message</label>
-							<textarea class="form-control" id="servmsg" rows="3"></textarea>
+							<textarea class="form-control" id="servmsg" name="servmsg"
+								rows="3"></textarea>
 						</div>
 
 						<div class="col-12">
-							<button type="submit" class="btn btn-primary">Book</button>
+							<button type="submit" id="submit" name="submit"
+								class="btn btn-primary">Book</button>
 						</div>
 					</form>
 				</div>
@@ -193,32 +339,32 @@
 				<tbody>
 
 					<%
-				        if (resultSet != null) {
-				        	
-				            while (resultSet.next()) {
-				            	
-				                int bookingId = resultSet.getInt("booking_id");
-				                Date date = resultSet.getDate("date");
-				                Time time = resultSet.getTime("time");
-				                String location = resultSet.getString("location");
-				                int mileage = resultSet.getInt("mileage");
-				                String vehicleNo = resultSet.getString("vehicle_no");
-				                String message = resultSet.getString("message");
-        			%>
+					if (results != null) {
+
+						while (results.next()) {
+
+							int bookingId = results.getInt("booking_id");
+							Date date = results.getDate("date");
+							Time time = results.getTime("time");
+							String location = results.getString("location");
+							int mileage = results.getInt("mileage");
+							String vehicleNo = results.getString("vehicle_no");
+							String message = results.getString("message");
+					%>
 
 					<tr>
-						<td><%= bookingId %></td>
-						<td><%= date %></td>
-						<td><%= time %></td>
-						<td><%= location %></td>
-						<td><%= vehicleNo %></td>
-						<td><%= mileage %></td>
-						<td><%= message %></td>
+						<td><%=bookingId%></td>
+						<td><%=date%></td>
+						<td><%=time%></td>
+						<td><%=location%></td>
+						<td><%=vehicleNo%></td>
+						<td><%=mileage%></td>
+						<td><%=message%></td>
 					</tr>
-					<% 
-            }}
-            
-    %>
+					<%
+					}
+					}
+					%>
 				</tbody>
 			</table>
 		</div>

@@ -26,9 +26,13 @@
 							<div class="card crd2">
 								<div class="card-body">
 									<p class="card-text">Login using Asgardeo</p>
-									<button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
-									<p class="card-text">Don't have an Asgardeo Account? <a href="https://console.asgardeo.io/" class="text-primary">Register</a></p>
-									
+									<button class="btn btn-primary btn-lg btn-block" type="submit"
+										onclick="window.location.href='https://api.asgardeo.io/t/orghsx24/oauth2/authorize?scope=openid%20address%20email%20phone%20profile&response_type=code&redirect_uri=http://localhost:8080/QuickFixBookings/oauth2client.jsp&client_id=JqXUOH30f3XZUgvmz5AIZH0N5OIa&login_hint=helani@gmail.com'">Login</button>
+									<p class="card-text">
+										Don't have an Asgardeo Account? <a
+											href="https://console.asgardeo.io/" class="text-primary">Register</a>
+									</p>
+
 								</div>
 							</div>
 						</div>
