@@ -98,12 +98,13 @@ if (request.getParameter("submit") != null) {
 <head>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
-	/*
+	
 	 const introspectionEndpointUrl = 'https://api.asgardeo.io/t/orghsx24/oauth2/introspect';
 	 const accessToken = localStorage.getItem('access_token');
 	 const idToken = localStorage.getItem('id_token');
 
 	 if (accessToken && idToken) {
+		 /*
 	 var settings = {
 	 "url" : introspectionEndpointUrl,
 	 "method" : "POST",
@@ -121,9 +122,10 @@ if (request.getParameter("submit") != null) {
 	 .done(
 	 function(response) {
 	 console.log(response);
+	 */
 
 	 // Check if the token is active before making the userinfo request
-	 if (response.active) {
+	// if (response.active) {
 	 var userinfoSettings = {
 	 "url" : "https://api.asgardeo.io/t/orghsx24/oauth2/userinfo",
 	 "method" : "GET",
@@ -137,6 +139,18 @@ if (request.getParameter("submit") != null) {
 	 $.ajax(userinfoSettings).done(
 	 function(userinfoResponse) {
 	 console.log(userinfoResponse);
+	  var username =  userinfoResponse.username;
+      var name = userinfoResponse.given_name;
+      var surname = userinfoResponse.family_name;
+      var phone = userinfoResponse.phone_number;
+      var email = userinfoResponse.email;
+      var country = userinfoResponse.address.country;
+      
+      document.getElementById('name').textContent = name + " " + surname;
+      document.getElementById('country').textContent = country;
+      document.getElementById('email').textContent = email;
+      document.getElementById('phone').textContent = phone;
+      document.getElementById('username').textContent = username;
 	 // Process userinfoResponse as needed
 	 }).fail(
 	 function(userinfoError) {
@@ -144,7 +158,7 @@ if (request.getParameter("submit") != null) {
 	 userinfoError);
 	 alert("Userinfo Error:");
 	 });
-	 } else {
+	 /*} else {
 	 // Handle inactive token
 	 console.error('Token is inactive');
 	 alert("Token is inactive");
@@ -153,11 +167,12 @@ if (request.getParameter("submit") != null) {
 	 // Handle introspection error
 	 console.error('Introspection Error:', introspectionError);
 	 alert("Introspection Error:");
-	 });
+	 });*/
 	 } else {
 	 window.location.href = "index.jsp";
 	 }
-	 */
+	 
+	
 </script>
 
 
@@ -173,7 +188,7 @@ if (request.getParameter("submit") != null) {
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 </head>
 <body>
-	<nav class="navbar fixed-top navbar-expand-lg">
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark ">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#"><img class="brand-logo"
 				src="./images/qFixLogo.png"></a>
@@ -187,22 +202,19 @@ if (request.getParameter("submit") != null) {
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link active item"
 						aria-current="page" href="#profile">Profile</a></li>
+						<li class="nav-item"><a class="nav-link item"
+						aria-current="page" href="#profile">Services</a></li>
 					<li class="nav-item"><a class="nav-link item"
 						href="#newBooking">New Booking</a></li>
 					<li class="nav-item"><a class="nav-link item" href="#bookings">Bookings</a>
 					</li>
 				</ul>
 				<button class="btn btn-outline-primary" type="submit">Logout</button>
-				<!-- x
-				<form class="d-flex">
-					<input class="form-control me-2" type="search" placeholder="Search"
-						aria-label="Search">
-					<button class="btn btn-outline-success" type="submit">Search</button>
-				</form>
-				-->
+			
 			</div>
 		</div>
 	</nav>
+	
 	<section id="profile">
 		<div class="prof-left col-4">
 			<h3>Book Smarter, Drive Safer</h3>
@@ -369,27 +381,41 @@ if (request.getParameter("submit") != null) {
 			</table>
 		</div>
 	</section>
-	<div class="footer-dark">
-		<footer>
-			<div class="container">
-				<div class="row social">
-					<div class="col-md-12 item text">
-						<h3>Quick Fix Bookings</h3>
-						<p>Praesent sed lobortis mi. Suspendisse vel placerat ligula.
-							Vivamus ac sem lacus. Ut vehicula rhoncus elementum. Etiam quis
-							tristique lectus. Aliquam in arcu eget velit pulvinar dictum vel
-							in justo.</p>
-					</div>
+	
+	<footer class="text-center text-lg-start" style="background-color: black; color:#ababab;">
+  <div class="container p-5">
+    <div class="row p-4">      
+    <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+       
+        <img class="footer-logo"
+				src="./images/qFixLogo.png">
+      </div>
+    
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+       <h4 class="text-uppercase">Quick Fix Bookings</h4>
+        <h5 class="text-uppercase">Effortless Service Booking for Your Wheel</h5>
+
+        <p>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste atque ea quis
+          molestias. Fugiat pariatur maxime quis culpa corporis vitae repudiandae
+          aliquam voluptatem veniam, est atque cumque eum delectus sint!
+        </p>
+        <div class="footer-dark row social">
 					<div class="col item social">
 						<a href="#"><i class="icon ion-social-facebook"></i></a><a
 							href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i
 							class="icon ion-social-instagram"></i></a>
 					</div>
 				</div>
-				<p class="copyright">QuickFixBookings © 2023 | Created by Helani
-					Seekkubadu</p>
-			</div>
-		</footer>
-	</div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div class="text-center p-2" style="background-color: black;">
+    <p>QuickFixBookings © 2023 | Created by Helani Seekkubadu</p>
+  </div>
+</footer>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -17,11 +17,29 @@ String sessionState = request.getParameter("session_state");
 <body>
 
 	<script type="text/javascript">
+	
         function makeTokenRequest() {
             
             var code = encodeURIComponent('<%= code %>');
             var sessionState = encodeURIComponent('<%= sessionState %>');
             
+           
+            var request = {
+            	    "url": "https://api.asgardeo.io/t/orghsx24/oauth2/token",
+            	    "method": "POST",
+            	    "timeout": 0,
+            	    "headers": {
+            	        "Content-Type": "application/x-www-form-urlencoded"
+            	    },
+            	    "data": {
+            	        "code": code,
+            	        "grant_type": "authorization_code",
+            	        "client_id": "JqXUOH30f3XZUgvmz5AIZH0N5OIa",
+            	        "client_secret": "ZA7kuuaWIjkV8h8CGgBkM1Aij4sV8hkg7iQWwp6Pe6Ea",
+            	        "redirect_uri": "http://localhost:8080/QuickFixBookings/oauth2client.jsp"
+            	    }
+            	};
+            /*
             var request = {
                 "url" : "http://localhost:8080/QuickFixBookings/AsgardeoProxyServlet.java", 
                 "method" : "POST",
@@ -32,7 +50,7 @@ String sessionState = request.getParameter("session_state");
                 "data" : {
                     "code" : code
                 }
-            };
+            };*/
 
             $.ajax(request).done(function(response) {
                 // Handle the response data here
@@ -52,6 +70,7 @@ String sessionState = request.getParameter("session_state");
         }
 
         makeTokenRequest();
+        
     </script>
 
 
