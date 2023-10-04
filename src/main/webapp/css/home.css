@@ -35,18 +35,22 @@ nav li:hover{
 	border-radius: .7rem;
 }
 
-
 .item, .item:hover{
 	color: #fff;
 }
+
 
 #profile{
 	display:flex;
 	align-items: center;
 	justify-content: center;
-	height:100vh;
-	padding:2rem;
+	padding: 10rem 2rem 4rem 2rem;
 	color:white;
+	margin-bottom:2rem;
+}
+
+.slide-content{
+	padding: 0 20%;
 }
 
 .card{
@@ -74,7 +78,7 @@ nav li:hover{
 	margin-bottom:2rem;
 }
 
-td{
+#profTable td{
 	padding-left: 30px;
 }
 
@@ -115,6 +119,10 @@ hr{
     text-align:center;
     
   }
+  section{
+	padding:1rem;
+}
+  
 }
 
 .footer-dark .item.social {
@@ -149,4 +157,15 @@ hr{
 
 .social{
 	display:block;
+}
+
+@media (max-width:990px) {
+ #profile{
+	display:block;
+	
+	
+}
+	
+    
+
 }

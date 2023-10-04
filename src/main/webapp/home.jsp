@@ -1,35 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.sql.*, java.util.Date, java.text.SimpleDateFormat"%>
+<%@ page import="services.DBConnection"%>
+<%@ page import="services.SQLServices"%>
 
 <%
-//Database connection parameters
-String dbUrl = "jdbc:mysql://51.132.137.223:3306/isec_assessment2";
-String dbUser = "isec";
-String dbPassword = "EUHHaYAmtzbv";
+
+SQLServices sqlservice = new SQLServices();
 ResultSet results = null;
-
-try {
-	// Load the MySQL JDBC driver
-	Class.forName("com.mysql.cj.jdbc.Driver");
-
-	// Establish a database connection
-	Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-
-	// Create a SQL SELECT query
-	String sql = "SELECT * FROM vehicle_service";
-
-	// Create a PreparedStatement
-	PreparedStatement preparedStatement = conn.prepareStatement(sql);
-
-	// Execute the SELECT query
-	results = preparedStatement.executeQuery();
-
-} catch (ClassNotFoundException e) {
-	e.printStackTrace();
-} catch (SQLException e) {
+try{
+	 results = sqlservice.getAllBookings();
+}catch (Exception e) {
 	e.printStackTrace();
 }
+
+
 if (request.getParameter("submit") != null) {
 	// Get form data
 	String dateString = request.getParameter("servDate");
@@ -38,65 +23,74 @@ if (request.getParameter("submit") != null) {
 	int mileage = Integer.parseInt(request.getParameter("mileage"));
 	String vehicleNo = request.getParameter("vehNum");
 	String message = request.getParameter("servmsg");
-	//String userName = request.getParameter("Boss2");
+	String userName = "Boss2";
 
-	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
-	Date date = null;
-	Time time = null;
 
 	try {
-		date = new Date(dateFormat.parse(dateString).getTime());
-		time = new Time(timeFormat.parse(timeString).getTime());
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-
-	try {
-		// Load the MySQL JDBC driver
-		Class.forName("com.mysql.cj.jdbc.Driver");
-
-		// Establish a database connection
-		Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-
-		// Create a SQL INSERT statement
-		String insertSql = "INSERT INTO vehicle_service (date, time, location, mileage, vehicle_no, message, username) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-		// Create a PreparedStatement
-		PreparedStatement insertStatement = conn.prepareStatement(insertSql);
-
-		// Set the parameter values
-		insertStatement.setTimestamp(1, new Timestamp(date.getTime()));
-		insertStatement.setTimestamp(2, new Timestamp(time.getTime()));
-		insertStatement.setString(3, location);
-		insertStatement.setInt(4, mileage);
-		insertStatement.setString(5, vehicleNo);
-		insertStatement.setString(6, message);
-		insertStatement.setString(7, "Boss2");
-
+		
 		// Execute the INSERT statement
-		int rowsInserted = insertStatement.executeUpdate();
+		int rowsInserted = sqlservice.insertBooking(dateString, timeString, location, mileage, vehicleNo, message, userName);
 
 		// Check if the insertion was successful
 		if (rowsInserted > 0) {
 	out.println("Data inserted successfully.");
+	response.sendRedirect(request.getRequestURI());
 		} else {
 	out.println("Failed to insert data.");
 		}
 
 		// Close the database connection
 		//conn.close();
-	} catch (ClassNotFoundException | SQLException e) {
+	} catch (Exception e) {
 		e.printStackTrace();
 	}
 }
+
+if (request.getParameter("delete") != null) {
+	// Get the booking ID to be deleted
+	int bookingIdToDelete = Integer.parseInt(request.getParameter("bookingID"));
+
+	System.out.println(bookingIdToDelete);
+	// Delete the record from the database
+	try {
+		// Load the MySQL JDBC driver
+		
+
+		// Execute the DELETE statement
+		int rowsDeleted = sqlservice.deleteBooking(bookingIdToDelete);
+
+		// Check if the deletion was successful
+		if (rowsDeleted > 0) {
+	out.println("Record deleted successfully.");
+		response.sendRedirect(request.getRequestURI());
+		} else {
+	out.println("Failed to delete the record.");
+		}
+
+		//response.setIntHeader("Refresh", 5);
+		// Close the database connection
+		 //conn.close();
+
+	} catch (Exception e) {
+		e.printStackTrace();
+		out.println("Error: " + e.getMessage());
+	}
+}
+
 %>
+
+
+
 
 <!DOCTYPE html>
 <html>
 <head>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+	crossorigin="anonymous"></script>
 <script type="text/javascript">
 	
 	 const introspectionEndpointUrl = 'https://api.asgardeo.io/t/orghsx24/oauth2/introspect';
@@ -150,7 +144,12 @@ if (request.getParameter("submit") != null) {
       document.getElementById('country').textContent = country;
       document.getElementById('email').textContent = email;
       document.getElementById('phone').textContent = phone;
-      document.getElementById('username').textContent = username;
+     // document.getElementById('username').textContent = username;
+     document.getElementById('submit').addEventListener('click', function () {
+                    // Set the username as a hidden field value in the form
+                    document.getElementById('currentUser').value = username;
+                });
+      
 	 // Process userinfoResponse as needed
 	 }).fail(
 	 function(userinfoError) {
@@ -186,9 +185,11 @@ if (request.getParameter("submit") != null) {
 <link rel="stylesheet" href="css/home.css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark ">
+	<nav class="navbar fixed-top navbar-expand-lg navbar-dark ">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#"><img class="brand-logo"
 				src="./images/qFixLogo.png"></a>
@@ -202,26 +203,62 @@ if (request.getParameter("submit") != null) {
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link active item"
 						aria-current="page" href="#profile">Profile</a></li>
-						<li class="nav-item"><a class="nav-link item"
+					<li class="nav-item"><a class="nav-link item"
 						aria-current="page" href="#profile">Services</a></li>
 					<li class="nav-item"><a class="nav-link item"
 						href="#newBooking">New Booking</a></li>
 					<li class="nav-item"><a class="nav-link item" href="#bookings">Bookings</a>
 					</li>
 				</ul>
-				<button class="btn btn-outline-primary" type="submit">Logout</button>
-			
+				<button class="btn btn-outline-primary" type="submit"
+					onclick="window.location.href='https://api.asgardeo.io/t/orghsx24/oidc/logout'">Logout</button>
+
 			</div>
 		</div>
 	</nav>
-	
+
 	<section id="profile">
-		<div class="prof-left col-4">
-			<h3>Book Smarter, Drive Safer</h3>
-			<h1>Quick Fix Bookings</h1>
-			<p>Book your service easily.</p>
+		<div class="prof-left col-lg-6 col-md-12">
+			<div id="carouselExampleAutoplaying" class="carousel slide"
+				data-bs-ride="carousel">
+				<div class="carousel-inner">
+					<div class="carousel-item active">
+					<div class="slide-content">
+						<h3>Book Smarter, Drive Safer</h3>
+						<h1>Quick Fix Bookings</h1>
+						<p>Book your service easily.</p>
+					</div>
+						
+					</div>
+					<div class="carousel-item">
+						<div class="slide-content">
+						<h3>2222Book Smarter, Drive Safer</h3>
+						<h1>Quick Fix Bookings</h1>
+						<p>Book your service easily.</p>
+					</div>
+					</div>
+					<div class="carousel-item">
+						<div class="slide-content">
+						<h3>333Book Smarter, Drive Safer</h3>
+						<h1>Quick Fix Bookings</h1>
+						<p>Book your service easily.</p>
+					</div>
+					</div>
+				</div>
+				<button class="carousel-control-prev" type="button"
+					data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Previous</span>
+				</button>
+				<button class="carousel-control-next" type="button"
+					data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Next</span>
+				</button>
+			</div>
+
 		</div>
-		<div class="prof-right col-5">
+		<div class="prof-right col-lg-4 col-md-12">
 			<div class="card">
 				<div class="card-body">
 					<div class="avatadiv">
@@ -234,11 +271,12 @@ if (request.getParameter("submit") != null) {
 								<td></td>
 								<td><span id='name'></span></td>
 							</tr>
-							<tr>
+							<!-- 	<tr>
 								<th>Username :</th>
 								<td></td>
 								<td><span id='username'></span></td>
 							</tr>
+							 -->
 							<tr>
 								<th>Email :</th>
 								<td></td>
@@ -323,7 +361,7 @@ if (request.getParameter("submit") != null) {
 							<textarea class="form-control" id="servmsg" name="servmsg"
 								rows="3"></textarea>
 						</div>
-
+						<input type="hidden" id="currentUser" name="currentUser" value="">
 						<div class="col-12">
 							<button type="submit" id="submit" name="submit"
 								class="btn btn-primary">Book</button>
@@ -346,6 +384,7 @@ if (request.getParameter("submit") != null) {
 						<th scope="col">Vehicle Number</th>
 						<th scope="col">Mileage</th>
 						<th scope="col">Message</th>
+						<th scope="col"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -372,6 +411,11 @@ if (request.getParameter("submit") != null) {
 						<td><%=vehicleNo%></td>
 						<td><%=mileage%></td>
 						<td><%=message%></td>
+						<td><button class="btn btn-danger" type="submit"
+								name="deleteConfirmation"
+								onclick="$('#deleteConfirmationModal').modal('show');  document.getElementById('bookingID').value = <%=bookingId%>;">
+								<i class="fa-solid fa-trash" style="color: #ffffff;"></i>
+							</button></td>
 					</tr>
 					<%
 					}
@@ -380,42 +424,77 @@ if (request.getParameter("submit") != null) {
 				</tbody>
 			</table>
 		</div>
-	</section>
-	
-	<footer class="text-center text-lg-start" style="background-color: black; color:#ababab;">
-  <div class="container p-5">
-    <div class="row p-4">      
-    <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-       
-        <img class="footer-logo"
-				src="./images/qFixLogo.png">
-      </div>
-    
-      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-       <h4 class="text-uppercase">Quick Fix Bookings</h4>
-        <h5 class="text-uppercase">Effortless Service Booking for Your Wheel</h5>
+		<!-- Confirmation Popup Modal -->
+		<div class="modal" id="deleteConfirmationModal" tabindex="-1"
+			aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+			<form method="post">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="deleteConfirmationModalLabel">Delete
+							Confirmation</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						Are you sure you want to delete? <input type="hidden"
+							id="bookingID" name="bookingID" value="">
+							
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-bs-dismiss="modal"
+							onclick="$('#deleteConfirmationModal').modal('hide');">Cancel</button>
+						<input type="submit" class="btn btn-danger" name="delete"
+							id="delete" value="Delete"
+							onclick="$('#deleteConfirmationModal').modal('hide');">
 
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste atque ea quis
-          molestias. Fugiat pariatur maxime quis culpa corporis vitae repudiandae
-          aliquam voluptatem veniam, est atque cumque eum delectus sint!
-        </p>
-        <div class="footer-dark row social">
-					<div class="col item social">
-						<a href="#"><i class="icon ion-social-facebook"></i></a><a
-							href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i
-							class="icon ion-social-instagram"></i></a>
 					</div>
 				</div>
-        
-      </div>
-    </div>
-  </div>
-  
-  <div class="text-center p-2" style="background-color: black;">
-    <p>QuickFixBookings © 2023 | Created by Helani Seekkubadu</p>
-  </div>
-</footer>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+			</div>
+			</form>
+		</div>
+	</section>
+
+	<footer class="text-center text-lg-start"
+		style="background-color: black; color: #ababab;">
+		<div class="container p-5">
+			<div class="row p-4">
+				<div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+
+					<img class="footer-logo" src="./images/qFixLogo.png">
+				</div>
+
+				<div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+					<h4 class="text-uppercase">Quick Fix Bookings</h4>
+					<h5 class="text-uppercase">Effortless Service Booking for Your
+						Wheel</h5>
+
+					<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+						Iste atque ea quis molestias. Fugiat pariatur maxime quis culpa
+						corporis vitae repudiandae aliquam voluptatem veniam, est atque
+						cumque eum delectus sint!</p>
+					<div class="footer-dark row social">
+						<div class="col item social">
+							<a href="#"><i class="icon ion-social-facebook"></i></a><a
+								href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i
+								class="icon ion-social-instagram"></i></a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="text-center p-2" style="background-color: black;">
+			<p>QuickFixBookings © 2023 | Created by Helani Seekkubadu</p>
+		</div>
+	</footer>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+		crossorigin="anonymous"></script>
+
+
 </body>
 </html>
