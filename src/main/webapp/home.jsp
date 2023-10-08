@@ -5,15 +5,13 @@
 <%@ page import="services.SQLServices"%>
 
 <%
-
 SQLServices sqlservice = new SQLServices();
 ResultSet results = null;
-try{
-	 results = sqlservice.getAllBookings();
-}catch (Exception e) {
+try {
+	results = sqlservice.getAllBookings();
+} catch (Exception e) {
 	e.printStackTrace();
 }
-
 
 if (request.getParameter("submit") != null) {
 	// Get form data
@@ -25,12 +23,11 @@ if (request.getParameter("submit") != null) {
 	String message = request.getParameter("servmsg");
 	String userName = "Boss2";
 
-
-
 	try {
-		
+
 		// Execute the INSERT statement
-		int rowsInserted = sqlservice.insertBooking(dateString, timeString, location, mileage, vehicleNo, message, userName);
+		int rowsInserted = sqlservice.insertBooking(dateString, timeString, location, mileage, vehicleNo, message,
+		userName);
 
 		// Check if the insertion was successful
 		if (rowsInserted > 0) {
@@ -55,7 +52,6 @@ if (request.getParameter("delete") != null) {
 	// Delete the record from the database
 	try {
 		// Load the MySQL JDBC driver
-		
 
 		// Execute the DELETE statement
 		int rowsDeleted = sqlservice.deleteBooking(bookingIdToDelete);
@@ -63,21 +59,20 @@ if (request.getParameter("delete") != null) {
 		// Check if the deletion was successful
 		if (rowsDeleted > 0) {
 	out.println("Record deleted successfully.");
-		response.sendRedirect(request.getRequestURI());
+	response.sendRedirect(request.getRequestURI());
 		} else {
 	out.println("Failed to delete the record.");
 		}
 
 		//response.setIntHeader("Refresh", 5);
 		// Close the database connection
-		 //conn.close();
+		//conn.close();
 
 	} catch (Exception e) {
 		e.printStackTrace();
 		out.println("Error: " + e.getMessage());
 	}
 }
-
 %>
 
 
@@ -187,8 +182,10 @@ if (request.getParameter("delete") != null) {
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
 </head>
 <body>
+
 	<nav class="navbar fixed-top navbar-expand-lg navbar-dark ">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#"><img class="brand-logo"
@@ -204,7 +201,7 @@ if (request.getParameter("delete") != null) {
 					<li class="nav-item"><a class="nav-link active item"
 						aria-current="page" href="#profile">Profile</a></li>
 					<li class="nav-item"><a class="nav-link item"
-						aria-current="page" href="#profile">Services</a></li>
+						aria-current="page" href="#service">Services</a></li>
 					<li class="nav-item"><a class="nav-link item"
 						href="#newBooking">New Booking</a></li>
 					<li class="nav-item"><a class="nav-link item" href="#bookings">Bookings</a>
@@ -223,26 +220,26 @@ if (request.getParameter("delete") != null) {
 				data-bs-ride="carousel">
 				<div class="carousel-inner">
 					<div class="carousel-item active">
-					<div class="slide-content">
-						<h3>Book Smarter, Drive Safer</h3>
-						<h1>Quick Fix Bookings</h1>
-						<p>Book your service easily.</p>
-					</div>
-						
+						<div class="slide-content">
+							<h3>Your Journey, Our Priority</h3>
+							<h1>Trust us for Reliable Vehicle Repairs and Service.</h1>
+							
+						</div>
+
 					</div>
 					<div class="carousel-item">
 						<div class="slide-content">
-						<h3>2222Book Smarter, Drive Safer</h3>
-						<h1>Quick Fix Bookings</h1>
-						<p>Book your service easily.</p>
-					</div>
+							<h3>Book Smarter, Drive Safer</h3>
+							<h1>Quick Fix Bookings</h1>
+							<p>Book your service easily.</p>
+						</div>
 					</div>
 					<div class="carousel-item">
 						<div class="slide-content">
-						<h3>333Book Smarter, Drive Safer</h3>
-						<h1>Quick Fix Bookings</h1>
-						<p>Book your service easily.</p>
-					</div>
+							<h3>From Tune-Ups to Overhauls</h3>
+							<h1>We've Got Your Vehicle Covered</h1>
+							<p>Choose Us for All Your Auto Repair Needs</p>
+						</div>
 					</div>
 				</div>
 				<button class="carousel-control-prev" type="button"
@@ -297,6 +294,85 @@ if (request.getParameter("delete") != null) {
 				</div>
 			</div>
 		</div>
+	</section>
+	<section id="service">
+		<div class="center">
+			<!-- <a class="carousel-control-prev" href="#serviceSlider" role="button"
+				data-slide="prev"> &#9664; </a> -->
+			<div class="wrapper">
+				<div class="inner">
+					<div class="card">
+						<img src="images/quickFixLogo.png">
+						<div class="content">
+							<h1>Oil changing</h1>
+						</div>
+					</div>
+					<div class="card">
+						<img src="images/quickFixLogo.png">
+						<div class="content">
+							<h1>Brake inspection & replacement</h1>
+						</div>
+					</div>
+					<div class="card">
+						<img src="images/quickFixLogo.png">
+						<div class="content">
+							<h1>Tire balancing & replacement</h1>
+						</div>
+					</div>
+					<div class="card">
+						<img src="images/quickFixLogo.png">
+						<div class="content">
+							<h1>Wheel alignment</h1>
+						</div>
+					</div>
+					<div class="card">
+						<img src="images/quickFixLogo.png">
+						<div class="content">
+							<h1>Battery testing & replacement</h1>
+						</div>
+					</div>
+					<div class="card">
+						<img src="images/quickFixLogo.png">
+						<div class="content">
+							<h1>A/C system inspection & repair</h1>
+						</div>
+					</div>
+					<div class="card">
+						<img src="images/quickFixLogo.png">
+						<div class="content">
+							<h1>Fuel System Services</h1>
+						</div>
+					</div>
+					<div class="card">
+						<img src="images/quickFixLogo.png">
+						<div class="content">
+							<h1>Wheel bearing replacement</h1>
+						</div>
+					</div>
+					<div class="card">
+						<img src="images/quickFixLogo.png">
+						<div class="content">
+							<h1>Interior and exterior cleaning</h1>
+						</div>
+					</div>
+					<div class="card">
+						<img src="images/quickFixLogo.png">
+						<div class="content">
+							<h1>Extra</h1>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		<!--  	<a class="carousel-control-next" href="#serviceSlider" role="button"
+				data-slide="next"> &#9654; </a>-->
+			<div class="map">
+				<button class="active first"></button>
+				<button class="second"></button>
+				<button class="third"></button>
+			</div>
+		</div>
+
 	</section>
 	<section id="newBooking">
 		<div class="container">
@@ -428,30 +504,30 @@ if (request.getParameter("delete") != null) {
 		<div class="modal" id="deleteConfirmationModal" tabindex="-1"
 			aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
 			<form method="post">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="deleteConfirmationModalLabel">Delete
-							Confirmation</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal"
-							aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						Are you sure you want to delete? <input type="hidden"
-							id="bookingID" name="bookingID" value="">
-							
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-bs-dismiss="modal"
-							onclick="$('#deleteConfirmationModal').modal('hide');">Cancel</button>
-						<input type="submit" class="btn btn-danger" name="delete"
-							id="delete" value="Delete"
-							onclick="$('#deleteConfirmationModal').modal('hide');">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="deleteConfirmationModalLabel">Delete
+								Confirmation</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							Are you sure you want to delete? <input type="hidden"
+								id="bookingID" name="bookingID" value="">
 
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-bs-dismiss="modal"
+								onclick="$('#deleteConfirmationModal').modal('hide');">Cancel</button>
+							<input type="submit" class="btn btn-danger" name="delete"
+								id="delete" value="Delete"
+								onclick="$('#deleteConfirmationModal').modal('hide');">
+
+						</div>
 					</div>
 				</div>
-			</div>
 			</form>
 		</div>
 	</section>
@@ -494,6 +570,35 @@ if (request.getParameter("delete") != null) {
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
 		crossorigin="anonymous"></script>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+	<script type="text/javascript">
+
+	const buttonsWrapper = document.querySelector(".map");
+	const slides = document.querySelector(".inner");
+
+	buttonsWrapper.addEventListener("click", e => {
+	  if (e.target.nodeName === "BUTTON") {
+	    Array.from(buttonsWrapper.children).forEach(item =>
+	      item.classList.remove("active")
+	    );
+	    if (e.target.classList.contains("first")) {
+	      slides.style.transform = "translateX(-0%)";
+	      e.target.classList.add("active");
+	    } else if (e.target.classList.contains("second")) {
+	      slides.style.transform = "translateX(-25%)";
+	      e.target.classList.add("active");
+	    } else if (e.target.classList.contains('third')){
+	      slides.style.transform = 'translatex(-50%)';
+	      e.target.classList.add('active');
+	    }
+	  }
+	});
+	
+	
+</script>
 
 
 </body>
