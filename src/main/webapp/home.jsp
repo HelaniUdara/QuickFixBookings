@@ -14,7 +14,7 @@ try {
 }
 
 if (request.getParameter("submit") != null) {
-	// Get form data
+
 	String dateString = request.getParameter("servDate");
 	String timeString = request.getParameter("servTime");
 	String location = request.getParameter("servLocation");
@@ -25,11 +25,9 @@ if (request.getParameter("submit") != null) {
 
 	try {
 
-		// Execute the INSERT statement
 		int rowsInserted = sqlservice.insertBooking(dateString, timeString, location, mileage, vehicleNo, message,
 		userName);
 
-		// Check if the insertion was successful
 		if (rowsInserted > 0) {
 	out.println("Data inserted successfully.");
 	response.sendRedirect(request.getRequestURI());
@@ -45,18 +43,14 @@ if (request.getParameter("submit") != null) {
 }
 
 if (request.getParameter("delete") != null) {
-	// Get the booking ID to be deleted
+
 	int bookingIdToDelete = Integer.parseInt(request.getParameter("bookingID"));
-
 	System.out.println(bookingIdToDelete);
-	// Delete the record from the database
-	try {
-		// Load the MySQL JDBC driver
 
-		// Execute the DELETE statement
+	try {
+
 		int rowsDeleted = sqlservice.deleteBooking(bookingIdToDelete);
 
-		// Check if the deletion was successful
 		if (rowsDeleted > 0) {
 	out.println("Record deleted successfully.");
 	response.sendRedirect(request.getRequestURI());
@@ -223,7 +217,7 @@ if (request.getParameter("delete") != null) {
 						<div class="slide-content">
 							<h3>Your Journey, Our Priority</h3>
 							<h1>Trust us for Reliable Vehicle Repairs and Service.</h1>
-							
+
 						</div>
 
 					</div>
@@ -268,12 +262,6 @@ if (request.getParameter("delete") != null) {
 								<td></td>
 								<td><span id='name'></span></td>
 							</tr>
-							<!-- 	<tr>
-								<th>Username :</th>
-								<td></td>
-								<td><span id='username'></span></td>
-							</tr>
-							 -->
 							<tr>
 								<th>Email :</th>
 								<td></td>
@@ -297,75 +285,72 @@ if (request.getParameter("delete") != null) {
 	</section>
 	<section id="service">
 		<div class="center">
-			<!-- <a class="carousel-control-prev" href="#serviceSlider" role="button"
-				data-slide="prev"> &#9664; </a> -->
+			<h1>Our Services</h1>
 			<div class="wrapper">
 				<div class="inner">
 					<div class="card">
-						<img src="images/quickFixLogo.png">
+						<img src="images/1.png">
 						<div class="content">
 							<h1>Oil changing</h1>
 						</div>
 					</div>
 					<div class="card">
-						<img src="images/quickFixLogo.png">
+						<img src="images/2.png">
 						<div class="content">
 							<h1>Brake inspection & replacement</h1>
 						</div>
 					</div>
 					<div class="card">
-						<img src="images/quickFixLogo.png">
+						<img src="images/3.png">
 						<div class="content">
 							<h1>Tire balancing & replacement</h1>
 						</div>
 					</div>
 					<div class="card">
-						<img src="images/quickFixLogo.png">
+						<img src="images/4.png">
 						<div class="content">
 							<h1>Wheel alignment</h1>
 						</div>
 					</div>
 					<div class="card">
-						<img src="images/quickFixLogo.png">
+						<img src="images/5.png">
 						<div class="content">
 							<h1>Battery testing & replacement</h1>
 						</div>
 					</div>
 					<div class="card">
-						<img src="images/quickFixLogo.png">
+						<img src="images/6.png">
 						<div class="content">
 							<h1>A/C system inspection & repair</h1>
 						</div>
 					</div>
 					<div class="card">
-						<img src="images/quickFixLogo.png">
+						<img src="images/7.png">
 						<div class="content">
 							<h1>Fuel System Services</h1>
 						</div>
 					</div>
 					<div class="card">
-						<img src="images/quickFixLogo.png">
+						<img src="images/8.png">
 						<div class="content">
 							<h1>Wheel bearing replacement</h1>
 						</div>
 					</div>
 					<div class="card">
-						<img src="images/quickFixLogo.png">
+						<img src="images/9.png">
 						<div class="content">
 							<h1>Interior and exterior cleaning</h1>
 						</div>
 					</div>
 					<div class="card">
-						<img src="images/quickFixLogo.png">
+						<img src="images/10.png">
 						<div class="content">
-							<h1>Extra</h1>
+							<h1>Wiring repairs</h1>
 						</div>
 					</div>
 				</div>
 
 			</div>
-		<!--  	<a class="carousel-control-next" href="#serviceSlider" role="button"
-				data-slide="next"> &#9654; </a>-->
 			<div class="map">
 				<button class="active first"></button>
 				<button class="second"></button>
@@ -382,18 +367,20 @@ if (request.getParameter("delete") != null) {
 					<hr>
 					<form class="row g-3">
 						<div class="col-md-6">
-							<label for="servDate" class="form-label">Date</label> <input
-								type="date" class="form-control" id="servDate" name="servDate">
+							<label for="servDate" class="form-label">Date<span
+								class="require">*</span></label> <input type="date" class="form-control"
+								id="servDate" name="servDate" required>
 						</div>
 						<div class="col-md-6">
-							<label for="servTime" class="form-label">Time</label> <input
-								type="time" class="form-control" id="servTime" name="servTime">
+							<label for="servTime" class="form-label">Time<span
+								class="require">*</span></label> <input type="time" class="form-control"
+								id="servTime" name="servTime" required>
 						</div>
 						<div class="col-12">
 							<label for="servLocation" class="form-label">Preferred
-								Location</label> <select class="form-select"
-								aria-label="Default select example" id="servLocation"
-								name="servLocation">
+								Location<span class="require">*</span>
+							</label> <select class="form-select" aria-label="Default select example"
+								id="servLocation" name="servLocation" required>
 								<option selected>Choose preferred district</option>
 								<option value="Colombo">Colombo</option>
 								<option value="Gampaga">Gampaga</option>
@@ -424,13 +411,15 @@ if (request.getParameter("delete") != null) {
 						</div>
 						<div class="col-6">
 							<label for="vehNum" class="form-label">Vehicle
-								Registration Number</label> <input type="text" class="form-control"
-								id="vehNum" name="vehNum" placeholder="CAT 6224">
+								Registration Number<span class="require">*</span>
+							</label> <input type="text" class="form-control" id="vehNum"
+								name="vehNum" placeholder="CAT 6224" required>
 						</div>
 						<div class="col-md-6">
 							<label for="mileage" class="form-label">Current Mileage
-								(km)</label> <input type="number" min="0" class="form-control"
-								id="mileage" name="mileage">
+								(km)<span class="require">*</span>
+							</label> <input type="number" min="0" class="form-control" id="mileage"
+								name="mileage" required>
 						</div>
 						<div class="col-12">
 							<label for="servmsg" class="form-label">Message</label>
@@ -524,7 +513,6 @@ if (request.getParameter("delete") != null) {
 							<input type="submit" class="btn btn-danger" name="delete"
 								id="delete" value="Delete"
 								onclick="$('#deleteConfirmationModal').modal('hide');">
-
 						</div>
 					</div>
 				</div>
@@ -570,36 +558,8 @@ if (request.getParameter("delete") != null) {
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
 		crossorigin="anonymous"></script>
-
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-	<script type="text/javascript">
-
-	const buttonsWrapper = document.querySelector(".map");
-	const slides = document.querySelector(".inner");
-
-	buttonsWrapper.addEventListener("click", e => {
-	  if (e.target.nodeName === "BUTTON") {
-	    Array.from(buttonsWrapper.children).forEach(item =>
-	      item.classList.remove("active")
-	    );
-	    if (e.target.classList.contains("first")) {
-	      slides.style.transform = "translateX(-0%)";
-	      e.target.classList.add("active");
-	    } else if (e.target.classList.contains("second")) {
-	      slides.style.transform = "translateX(-25%)";
-	      e.target.classList.add("active");
-	    } else if (e.target.classList.contains('third')){
-	      slides.style.transform = 'translatex(-50%)';
-	      e.target.classList.add('active');
-	    }
-	  }
-	});
-	
-	
-</script>
-
-
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+	<script src="js/home.js"></script>
 </body>
 </html>

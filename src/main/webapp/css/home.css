@@ -11,6 +11,12 @@ body {
 
 section{
 	padding:2rem;
+	margin: 2rem 0;
+}
+
+.require{
+	color:red;
+	font-size:1.4rem;
 }
 
 .brand-logo{
@@ -35,10 +41,22 @@ nav li:hover{
 	border-radius: .7rem;
 }
 
+.navbar-nav a.active {
+   border-bottom: 2px solid red; 
+ }
+
+ .navbar-nav a {
+   border-bottom: 2px solid transparent; 
+   transition: border-bottom 0.3s ease;
+ }
+
 .item, .item:hover{
 	color: #fff;
 }
 
+.center h1{
+	margin-bottom:2rem;
+}
 
 #profile{
 	display:flex;
