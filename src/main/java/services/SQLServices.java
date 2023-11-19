@@ -38,7 +38,7 @@ public class SQLServices {
 			insertStatement.setInt(4, mileage);
 			insertStatement.setString(5, vehicleNo);
 			insertStatement.setString(6, message);
-			insertStatement.setString(7, "Boss2");
+			insertStatement.setString(7, username);
 
 			// Execute the INSERT statement
 			rowsInserted = insertStatement.executeUpdate();
@@ -80,16 +80,16 @@ public class SQLServices {
 		return rowsDeleted;
 	}
 
-	public ResultSet getAllBookings() {
+	public ResultSet getAllBookings(String username) {
 		ResultSet results = null;
 
 		try {
 			
-			String sql = "SELECT * FROM vehicle_service";
+			String sql = "SELECT * FROM vehicle_service WHERE username = ?";
 
 			// Create a PreparedStatement
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
-
+			preparedStatement.setString(1,username);
 			// Execute the SELECT query
 			results = preparedStatement.executeQuery();
 

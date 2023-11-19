@@ -3,12 +3,20 @@
 <%@ page import="java.sql.*, java.util.Date, java.text.SimpleDateFormat"%>
 <%@ page import="services.DBConnection"%>
 <%@ page import="services.SQLServices"%>
+<%@ page import="java.io.InputStream, java.io.IOException, java.util.Properties" %>
 
 <%
+
+//Retrieve client_id and sessionState from the session 
+String clientId = (String) session.getAttribute("client_id"); 
+String sessionState = (String) session.getAttribute("session_state"); 
+
+
 SQLServices sqlservice = new SQLServices();
 ResultSet results = null;
 try {
-	results = sqlservice.getAllBookings();
+	String username = "Boss2";
+	results = sqlservice.getAllBookings(username);
 } catch (Exception e) {
 	e.printStackTrace();
 }
@@ -67,6 +75,21 @@ if (request.getParameter("delete") != null) {
 		out.println("Error: " + e.getMessage());
 	}
 }
+
+
+//Initialize a Properties object
+Properties properties = new Properties();
+
+//Load the properties file
+try {
+ InputStream inputStream = application.getResourceAsStream("/WEB-INF/classes/application.properties");
+ properties.load(inputStream);
+} catch (IOException e) {
+ e.printStackTrace();
+}
+
+String post_logout_redirect_uri = properties.getProperty("baseurl")+"/QuickFixBookings/index.jsp"; 
+String client_id =  properties.getProperty("client_id");
 %>
 
 
@@ -82,9 +105,12 @@ if (request.getParameter("delete") != null) {
 	crossorigin="anonymous"></script>
 <script type="text/javascript">
 	
-	 const introspectionEndpointUrl = 'https://api.asgardeo.io/t/orghsx24/oauth2/introspect';
-	 const accessToken = localStorage.getItem('access_token');
-	 const idToken = localStorage.getItem('id_token');
+	 const introspectionEndpointUrl = '<%= properties.getProperty("introspectionEndpoint") %>';
+	// const accessToken = localStorage.getItem('access_token');
+	 //const idToken = localStorage.getItem('id_token');
+	 const accessToken = sessionStorage.getItem('access_token'); 
+	 const idToken = sessionStorage.getItem("id_token"); 
+	 const infoUrl = '<%= properties.getProperty("userinfoEndpoint") %>';
 
 	 if (accessToken && idToken) {
 		 /*
@@ -110,7 +136,7 @@ if (request.getParameter("delete") != null) {
 	 // Check if the token is active before making the userinfo request
 	// if (response.active) {
 	 var userinfoSettings = {
-	 "url" : "https://api.asgardeo.io/t/orghsx24/oauth2/userinfo",
+	 "url" : infoUrl,
 	 "method" : "GET",
 	 "timeout" : 0,
 	 "headers" : {
@@ -201,9 +227,19 @@ if (request.getParameter("delete") != null) {
 					<li class="nav-item"><a class="nav-link item" href="#bookings">Bookings</a>
 					</li>
 				</ul>
+				<li>
+     			<form id="logout-form" action= "<%= properties.getProperty("logoutEndpoint") %>" method="POST">
+				    <input type="hidden" id="client-id" name="client_id" value="<%= client_id %>">
+				    <input type="hidden" id="post-logout-redirect-uri" name="post_logout_redirect_uri" value="<%= post_logout_redirect_uri %>">
+				    <input type="hidden" id="state" name="state" value="<%= sessionState %>">
+        			<button class="btn btn-outline-primary" id="logout-btn" type="submit">Logout</button>
+   				</form>
+				</li>
+				
+				<!--  
 				<button class="btn btn-outline-primary" type="submit"
 					onclick="window.location.href='https://api.asgardeo.io/t/orghsx24/oidc/logout'">Logout</button>
-
+-->
 			</div>
 		</div>
 	</nav>
@@ -466,6 +502,10 @@ if (request.getParameter("delete") != null) {
 							int mileage = results.getInt("mileage");
 							String vehicleNo = results.getString("vehicle_no");
 							String message = results.getString("message");
+
+							// Compare the date with the current date
+							Date currentDate = new Date();
+							boolean isPastDate = date.before(currentDate);
 					%>
 
 					<tr>
@@ -476,11 +516,25 @@ if (request.getParameter("delete") != null) {
 						<td><%=vehicleNo%></td>
 						<td><%=mileage%></td>
 						<td><%=message%></td>
-						<td><button class="btn btn-danger" type="submit"
+						<td>
+							<%
+							if (isPastDate) {
+							%> <!-- Show view icon for past dates -->
+							<button class="btn btn-light" type="button" disabled>
+								<i class="fa-solid fa-eye" style="color: #000000;"></i>
+							</button> 
+							<%
+ 							} else {
+ 							%> <!-- Show delete button for future dates -->
+							<button class="btn btn-danger" type="submit"
 								name="deleteConfirmation"
-								onclick="$('#deleteConfirmationModal').modal('show');  document.getElementById('bookingID').value = <%=bookingId%>;">
+								onclick="$('#deleteConfirmationModal').modal('show'); document.getElementById('bookingID').value = <%=bookingId%>;">
 								<i class="fa-solid fa-trash" style="color: #ffffff;"></i>
-							</button></td>
+							</button> 
+							<%
+ 								}
+							%>
+						</td>
 					</tr>
 					<%
 					}
@@ -559,7 +613,8 @@ if (request.getParameter("delete") != null) {
 		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
 		crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 	<script src="js/home.js"></script>
 </body>
 </html>
