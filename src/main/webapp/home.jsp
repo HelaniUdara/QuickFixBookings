@@ -228,18 +228,8 @@ String client_id =  properties.getProperty("client_id");
 					</li>
 				</ul>
 				<li>
-     			<form id="logout-form" action= "<%= properties.getProperty("logoutEndpoint") %>" method="POST">
-				    <input type="hidden" id="client-id" name="client_id" value="<%= client_id %>">
-				    <input type="hidden" id="post-logout-redirect-uri" name="post_logout_redirect_uri" value="<%= post_logout_redirect_uri %>">
-				    <input type="hidden" id="state" name="state" value="<%= sessionState %>">
-        			<button class="btn btn-outline-primary" id="logout-btn" type="submit">Logout</button>
-   				</form>
 				</li>
-				
-				<!--  
-				<button class="btn btn-outline-primary" type="submit"
-					onclick="window.location.href='https://api.asgardeo.io/t/orghsx24/oidc/logout'">Logout</button>
--->
+				<button class="btn btn-outline-primary" type="button" onclick="window.location.href='<%= properties.getProperty("logoutEndpoint") %>'">Logout</button>
 			</div>
 		</div>
 	</nav>
