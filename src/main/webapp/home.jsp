@@ -18,7 +18,7 @@ SQLServices sqlservice = new SQLServices();
 ResultSet results = null;
 try {
 	String username = "tesths@gmail.com";
-	out.println(username);// use Encode.forHtml(request.getParameter("servDate"));
+	out.println(username);
 	results = sqlservice.getAllBookings(username);
 } catch (Exception e) {
 	e.printStackTrace();
@@ -110,28 +110,7 @@ String client_id =  properties.getProperty("client_id");
 	 const infoUrl = '<%= properties.getProperty("userinfoEndpoint") %>';
 
 	 if (accessToken && idToken) {
-		 /*
-	 var settings = {
-	 "url" : introspectionEndpointUrl,
-	 "method" : "POST",
-	 "timeout" : 0,
-	 "headers" : {
-	 "Authorization" : "Bearer " + accessToken
-	 },
-	 "data" : {
-	 "token" : accessToken
-	 }
-	 };
-
-	 $
-	 .ajax(settings)
-	 .done(
-	 function(response) {
-	 console.log(response);
-	 */
-
-	 // Check if the token is active before making the userinfo request
-	// if (response.active) {
+	
 	 var userinfoSettings = {
 	 "url" : infoUrl,
 	 "method" : "GET",
@@ -156,29 +135,16 @@ String client_id =  properties.getProperty("client_id");
       document.getElementById('country').textContent = country;
       document.getElementById('email').textContent = email;
       document.getElementById('phone').textContent = phone;
-     // document.getElementById('username').textContent = username;
-     document.getElementById('submit').addEventListener('click', function () {
+      document.getElementById('submit').addEventListener('click', function () {
                     // Set the username as a hidden field value in the form
                     document.getElementById('currentUser').value = username;
                 });
-      
-	 // Process userinfoResponse as needed
 	 }).fail(
 	 function(userinfoError) {
 	 console.error('Userinfo Error:',
 	 userinfoError);
 	 alert("Userinfo Error:");
 	 });
-	 /*} else {
-	 // Handle inactive token
-	 console.error('Token is inactive');
-	 alert("Token is inactive");
-	 }
-	 }).fail(function(introspectionError) {
-	 // Handle introspection error
-	 console.error('Introspection Error:', introspectionError);
-	 alert("Introspection Error:");
-	 });*/
 	 } else {
 	 window.location.href = "index.jsp";
 	 }
@@ -202,7 +168,7 @@ String client_id =  properties.getProperty("client_id");
 
 </head>
 <body>
-
+<!-- ***************Navigation Bar******************** -->
 	<nav class="navbar fixed-top navbar-expand-lg navbar-dark ">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#"><img class="brand-logo"
@@ -231,6 +197,7 @@ String client_id =  properties.getProperty("client_id");
 		</div>
 	</nav>
 
+<!-- ***************Profile Section******************** -->
 	<section id="profile">
 		<div class="prof-left col-lg-6 col-md-12">
 			<div id="carouselExampleAutoplaying" class="carousel slide"
@@ -272,6 +239,7 @@ String client_id =  properties.getProperty("client_id");
 			</div>
 
 		</div>
+		<!-- ***************Profile Information Display******************** -->
 		<div class="prof-right col-lg-4 col-md-12">
 			<div class="card">
 				<div class="card-body">
@@ -306,6 +274,7 @@ String client_id =  properties.getProperty("client_id");
 			</div>
 		</div>
 	</section>
+	<!-- ***************Service Section******************** -->
 	<section id="service">
 		<div class="center">
 			<h1>Our Services</h1>
@@ -382,6 +351,7 @@ String client_id =  properties.getProperty("client_id");
 		</div>
 
 	</section>
+	<!-- ***************New Bookings Section******************** -->
 	<section id="newBooking">
 		<div class="container">
 			<div class="card">
@@ -459,6 +429,7 @@ String client_id =  properties.getProperty("client_id");
 			</div>
 		</div>
 	</section>
+	<!-- ***************Bookings Displaying Section******************** -->
 	<section id="bookings">
 		<div class="container">
 			<h1 class="topic list">Booking List</h1>
