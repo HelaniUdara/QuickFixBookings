@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ page import="org.owasp.encoder.Encode" %>
 <%@ page import="java.sql.*, java.util.Date, java.text.SimpleDateFormat"%>
 <%@ page import="services.DBConnection"%>
 <%@ page import="services.SQLServices"%>
@@ -8,28 +9,32 @@
 <%
 
 //Retrieve client_id and sessionState from the session 
-String clientId = (String) session.getAttribute("client_id"); 
-String sessionState = (String) session.getAttribute("session_state"); 
+String clientId = Encode.forHtml((String) session.getAttribute("client_id"));
+String sessionState = Encode.forHtml((String) session.getAttribute("session_state"));
 
 
 SQLServices sqlservice = new SQLServices();
+
 ResultSet results = null;
 try {
-	String username = "Boss2";
+	String username = "tesths@gmail.com";
+	out.println(username);// use Encode.forHtml(request.getParameter("servDate"));
 	results = sqlservice.getAllBookings(username);
 } catch (Exception e) {
 	e.printStackTrace();
 }
 
+
+
 if (request.getParameter("submit") != null) {
 
-	String dateString = request.getParameter("servDate");
-	String timeString = request.getParameter("servTime");
-	String location = request.getParameter("servLocation");
-	int mileage = Integer.parseInt(request.getParameter("mileage"));
-	String vehicleNo = request.getParameter("vehNum");
-	String message = request.getParameter("servmsg");
-	String userName = "Boss2";
+	String dateString = Encode.forHtml(request.getParameter("servDate"));
+	String timeString = Encode.forHtml(request.getParameter("servTime"));
+	String location = Encode.forHtml(request.getParameter("servLocation"));
+	int mileage = Integer.parseInt(Encode.forHtml(request.getParameter("mileage")));
+	String vehicleNo = Encode.forHtml(request.getParameter("vehNum"));
+	String message = Encode.forHtml(request.getParameter("servmsg"));
+	String userName = Encode.forHtml(request.getParameter("currentUser"));
 
 	try {
 
@@ -42,13 +47,12 @@ if (request.getParameter("submit") != null) {
 		} else {
 	out.println("Failed to insert data.");
 		}
-
-		// Close the database connection
-		//conn.close();
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
 }
+
+
 
 if (request.getParameter("delete") != null) {
 
@@ -66,16 +70,11 @@ if (request.getParameter("delete") != null) {
 	out.println("Failed to delete the record.");
 		}
 
-		//response.setIntHeader("Refresh", 5);
-		// Close the database connection
-		//conn.close();
-
 	} catch (Exception e) {
 		e.printStackTrace();
 		out.println("Error: " + e.getMessage());
 	}
-}
-
+} 
 
 //Initialize a Properties object
 Properties properties = new Properties();
@@ -106,8 +105,6 @@ String client_id =  properties.getProperty("client_id");
 <script type="text/javascript">
 	
 	 const introspectionEndpointUrl = '<%= properties.getProperty("introspectionEndpoint") %>';
-	// const accessToken = localStorage.getItem('access_token');
-	 //const idToken = localStorage.getItem('id_token');
 	 const accessToken = sessionStorage.getItem('access_token'); 
 	 const idToken = sessionStorage.getItem("id_token"); 
 	 const infoUrl = '<%= properties.getProperty("userinfoEndpoint") %>';
@@ -499,13 +496,13 @@ String client_id =  properties.getProperty("client_id");
 					%>
 
 					<tr>
-						<td><%=bookingId%></td>
-						<td><%=date%></td>
-						<td><%=time%></td>
-						<td><%=location%></td>
-						<td><%=vehicleNo%></td>
-						<td><%=mileage%></td>
-						<td><%=message%></td>
+						<td><%= Encode.forHtml(String.valueOf(bookingId)) %></td>
+						<td><%=Encode.forHtml(date.toString())%></td>
+						<td><%=Encode.forHtml(time.toString())%></td>
+						<td><%=Encode.forHtml(location)%></td>
+						<td><%=Encode.forHtml(vehicleNo)%></td>
+						<td><%=Encode.forHtml(String.valueOf(mileage))%></td>
+						<td><%=Encode.forHtml(message)%></td>
 						<td>
 							<%
 							if (isPastDate) {
@@ -518,7 +515,7 @@ String client_id =  properties.getProperty("client_id");
  							%> <!-- Show delete button for future dates -->
 							<button class="btn btn-danger" type="submit"
 								name="deleteConfirmation"
-								onclick="$('#deleteConfirmationModal').modal('show'); document.getElementById('bookingID').value = <%=bookingId%>;">
+								onclick="$('#deleteConfirmationModal').modal('show'); document.getElementById('bookingID').value = <%= Encode.forHtml(String.valueOf(bookingId)) %>;">
 								<i class="fa-solid fa-trash" style="color: #ffffff;"></i>
 							</button> 
 							<%
