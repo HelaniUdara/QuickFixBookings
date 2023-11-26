@@ -10,7 +10,7 @@
 
 //Retrieve client_id and sessionState from the session 
 String clientId = Encode.forHtml((String) session.getAttribute("client_id"));
-String sessionState = Encode.forHtml((String) session.getAttribute("session_state"));
+//String sessionState = Encode.forHtml((String) session.getAttribute("session_state"));
 
 
 SQLServices sqlservice = new SQLServices();
